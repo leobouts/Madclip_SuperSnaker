@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "snake.h"
 
+
 class Renderer {
  public:
   Renderer(const std::size_t screen_width, const std::size_t screen_height,
@@ -12,7 +13,7 @@ class Renderer {
   ~Renderer();
 
   void Render(Snake const snake, SDL_Point const &food);
-  void UpdateWindowTitle(int score, int fps);
+  void UpdateWindowTitle(int score, int fps, int high_score);
 
  private:
   SDL_Window *sdl_window;

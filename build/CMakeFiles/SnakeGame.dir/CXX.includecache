@@ -6,13 +6,33 @@
 
 #IncludeRegexTransform: 
 
-/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/renderer.cpp
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/controller.h
+snake.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/snake.h
+
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/game.h
+random
+-
+SDL.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/SDL.h
+controller.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/controller.h
 renderer.h
 /Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/renderer.h
+snake.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/snake.h
+
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/main.cpp
 iostream
 -
-string
+fstream
 -
+controller.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/controller.h
+game.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/game.h
+renderer.h
+/Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/renderer.h
 
 /Users/leonidas/desktop/CppND-Capstone-Snake-Game/src/renderer.h
 vector

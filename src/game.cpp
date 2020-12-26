@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <fstream>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
@@ -7,6 +8,24 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       engine(dev()),
       random_w(0, static_cast<int>(grid_width-1)),
       random_h(0, static_cast<int>(grid_height-1)) {
+
+  //Read the high score
+  std::ifstream input("../score.txt");
+  std::string tempScore="";
+
+  input >> tempScore;
+
+  if(tempScore == "")
+  {
+    high_score = 0;
+  }
+  else
+  {
+    high_score = std::stoi(tempScore);
+  }
+
+  input.close();
+
   PlaceFood();
 }
 
@@ -36,9 +55,14 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.UpdateWindowTitle(score, frame_count, high_score);
       frame_count = 0;
       title_timestamp = frame_end;
+
+      //save current score
+      std::ofstream output("../score.txt");
+      output << high_score;
+      output.close();
     }
 
     // If the time for this frame is too small (i.e. frame_duration is
@@ -58,6 +82,19 @@ void Game::PlaceFood() {
     // Check that the location is not occupied by a snake item before placing
     // food.
     if (!snake.SnakeCell(x, y)) {
+      if(Game::food_counter != 0 && Game::food_counter%4 == 0)
+      {
+        points = 4;
+      }
+      else if(Game::food_counter != 0 && Game::food_counter%9 == 0)
+      {
+        points = 9;
+      }
+      else
+      {
+        points = 1;
+      }
+
       food.x = x;
       food.y = y;
       return;
@@ -75,11 +112,20 @@ void Game::Update() {
 
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
-    score++;
+    
+    score+= points;
+
+    //update highscore
+    if(score > high_score) 
+      high_score = score; 
+
+    Game::food_counter++;
+
     PlaceFood();
+
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.02;
+    snake.speed += 0.005;
   }
 }
 

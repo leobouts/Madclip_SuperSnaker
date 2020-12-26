@@ -1,3 +1,7 @@
+
+<img src="resources/super_snaker.gif"/>
+
+
 ## Dependencies for Running Locally
 
 * cmake >= 3.7
@@ -20,3 +24,21 @@
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
+
+
+## Rubric Points
+
+1. The project demonstrates an understanding of C++ functions and control structures.    
+2. The project uses Object Oriented Programming techniques.
+3. Classes use appropriate access specifiers for class members.
+4. The project reads data from a file and process the data, or the program writes data to a file.
+5. The project accepts user input and processes the input.
+6. The project has input validation.
+
+
+## Additional Functionality
+
+1. A command line menu with a nice flow.
+2. Highscore is maintained in a txt file.
+3. New snake and food images with SDL functions.
+4. A special type of food that has more points.

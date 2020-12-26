@@ -1,6 +1,8 @@
 #include "renderer.h"
+#include "game.h"
 #include <iostream>
 #include <string>
+
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -9,6 +11,7 @@ Renderer::Renderer(const std::size_t screen_width,
       screen_height(screen_height),
       grid_width(grid_width),
       grid_height(grid_height) {
+
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
@@ -40,21 +43,34 @@ Renderer::~Renderer() {
 
 void Renderer::Render(Snake const snake, SDL_Point const &food) {
   SDL_Rect block;
+  double degrees;
   block.w = screen_width / (grid_width);
   block.h = screen_height / (grid_height);
 
   // Clear screen
-  SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   SDL_RenderClear(sdl_renderer);
 
   // Render food
   block.x = food.x * block.w;
   block.y = food.y * block.h;
 
-  SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/cash.bmp")), NULL, &block);
+
+  //rendering special food
+  if(Game::food_counter !=0 && Game::food_counter%4 == 0){
+    SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/kotero.bmp")), NULL, &block);
+  }
+  else if (Game::food_counter !=0 && Game::food_counter%9 == 0)
+  {
+    SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/elikoptero.bmp")), NULL, &block);
+  }
+  else
+  {
+    SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/cash.bmp")), NULL, &block);
+  } 
 
   // Render snake's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(sdl_renderer, 234, 170, 0, 255);
   for (SDL_Point const &point : snake.body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
@@ -64,16 +80,31 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
   // Render snake's head
   block.x = static_cast<int>(snake.head_x) * block.w;
   block.y = static_cast<int>(snake.head_y) * block.h;
+
   if (snake.alive) {
 
-    //SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-
-    SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/mad.bmp")), NULL, &block);
-  
+      
+    switch (snake.direction) 
+    {
+      case Snake::Direction::kUp:
+        SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/madclip-top.bmp")), NULL, &block);
+        break;
+      case Snake::Direction::kRight:
+        SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/madclip-right.bmp")), NULL, &block);
+        break;
+      case Snake::Direction::kDown:
+        SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/madclip-down.bmp")), NULL, &block);
+        break;
+      case Snake::Direction::kLeft:
+        SDL_RenderCopy(sdl_renderer,SDL_CreateTextureFromSurface(sdl_renderer, SDL_LoadBMP("../resources/madclip-left.bmp")), NULL, &block);
+        break;
+    }
+    
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
     SDL_RenderFillRect(sdl_renderer, &block);
   }
+
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -81,7 +112,7 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
 
 
 
-void Renderer::UpdateWindowTitle(int score, int fps) {
+void Renderer::UpdateWindowTitle(int score, int fps, int high_score) {
   std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
